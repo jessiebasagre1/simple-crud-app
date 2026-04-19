@@ -1,0 +1,151 @@
+
+.product-info{
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+.product-table{
+    border-collapse: collapse;
+    width: 100%;
+    height: auto;
+    text-align: center;   
+}
+.product-info.blur{
+    filter: blur(5px);
+}
+.product-header{
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+.product-header button{
+    width: fit-content;
+    height: fit-content;
+    border-radius: 5px;
+    padding: 5px;
+}
+tr,th, td {
+  border: 1px solid #000000;
+  padding: 8px;
+  text-align: center;
+}
+/*=======================*/
+.product-form{
+    margin: 0;
+    padding: 40px;
+    display: block;
+    position: relative;  
+    margin-bottom: 10px; 
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 2;
+    letter-spacing: 0.5px;
+}
+
+.product-form label, .product-form input,.product-form h4{
+margin-bottom: 8px;
+font-size: 1.5rem;
+}
+
+.product-form button{
+    font-size: 1rem;
+    border-radius: 5px;
+    margin-top: 70px;
+    margin-left: 125px;   
+    cursor: pointer;
+    width: fit-content;
+}
+.product-form h4{
+    margin-top: 0;
+}
+/*===============================================*/
+.add-product{
+    text-align: start; 
+    background-color: rgb(255, 255, 255);
+    width: 450px;
+    height: auto;
+    display: none;
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgb(0, 0, 0);
+    line-height: 2;
+    letter-spacing: 0.5px;
+}
+.edit-product{
+    text-align: start; 
+    background-color: rgb(255, 255, 255);
+    width: 450px;
+    height: 500px;
+    display: none;
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgb(0, 0, 0);
+    line-height: 2;
+    letter-spacing: 0.5px;
+}
+.edit-product h4{
+    font-size: 2rem;
+    margin: 0%;
+}
+#editForm{
+    padding: 20px;
+    font-size: 1.5rem; 
+}
+#editForm input{
+    font-size: 1.5rem;
+    
+}
+#editForm button{
+    font-size: 1.5rem;
+    border-radius: 5px;
+    margin-top: 70px;
+    margin-left: 170px;   
+    cursor: pointer;
+}
+#editForm button:hover{
+    scale: 1.1;
+}
+#editPrice{
+    width: 70px;
+}
+/*=================PRODUCT CONTROLS(EDIT/DELETE)===================*/
+.edit-btn{
+    padding: 5px;
+    border-radius: 5px;
+    width: 70px;
+    cursor: pointer;
+}
+.edit-btn:hover{
+    background-color: green;
+}
+.delete-btn{
+    padding: 5px;
+    border-radius: 5px;
+    width: 70px;
+    cursor: pointer;
+}
+.delete-btn:hover{
+    background-color: red;
+}
+/*==================================================================*/
+.active{
+    display: block;
+}
+.show{
+    display: block;
+}
+
+.closeBtn{
+    position: absolute;
+    top: 10px;
+    right: 40px;
+    cursor: pointer;
+    width: fit-content;
+}
+

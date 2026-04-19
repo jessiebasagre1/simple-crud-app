@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Manager</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="product-info">
+        <div class="product-header">
+            <h2>📦 Product Management</h2>
+            <button id="addBtn" onclick="showForm()">Add Product</button>
+        </div>
+        
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Stocks</th>
+                    <th>Price</th>
+                    <th>Controls</th>
+                </tr>
+            </thead>
+            <tbody class="result"></tbody>
+        </table>
+    </div>
+
+    <!-- ADD PRODUCT FORM -->
+    <div class="add-product">
+        <form class="product-form" id="productForm">
+            <div class="closeBtn" id="closeAddForm">
+                <h4>&times;</h4>
+            </div>
+            <h4>Add Product</h4>
+            
+            <label for="name">Product Name:</label>
+            <input type="text" id="name" name="productName" required><br>
+
+            <label for="qty">Quantity:</label><br>
+            <input type="number" id="qty" name="productQty" value="0" min="0" max="99" required><br>
+
+            <label for="price">Price:</label><br>
+            <input type="number" id="price" name="productPrice" value="0" min="0" step="0.01" required><br>
+
+            <button type="submit">Add Product</button>
+        </form>
+    </div>
+
+    <!-- EDIT PRODUCT FORM -->
+    <div class="edit-product">
+        <form id="editForm">
+            <div class="closeBtn" id="closeEditForm">
+                <h4>&times;</h4>
+            </div>
+            <h4>Edit Product</h4>
+            
+            <label for="editName">Product Name</label>
+            <input type="text" id="editName" name="editName" required><br>
+
+            <label for="editQty">Quantity:</label><br>
+            <input type="number" id="editQty" name="editQty" value="0" min="0" max="99" required><br>
+
+            <label for="editPrice">Price:</label><br>
+            <input type="number" id="editPrice" name="editPrice" value="0" min="0" step="0.01" required><br>
+
+            <button type="submit">Apply</button>
+        </form>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
