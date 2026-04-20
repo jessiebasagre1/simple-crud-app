@@ -1,151 +1,344 @@
-
-.product-info{
-    width: 100%;
-    height: auto;
-    margin: 0 auto;
-}
-.product-table{
-    border-collapse: collapse;
-    width: 100%;
-    height: auto;
-    text-align: center;   
-}
-.product-info.blur{
-    filter: blur(5px);
-}
-.product-header{
-    justify-content: space-between;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-}
-.product-header button{
-    width: fit-content;
-    height: fit-content;
-    border-radius: 5px;
-    padding: 5px;
-}
-tr,th, td {
-  border: 1px solid #000000;
-  padding: 8px;
-  text-align: center;
-}
-/*=======================*/
-.product-form{
-    margin: 0;
-    padding: 40px;
-    display: block;
-    position: relative;  
-    margin-bottom: 10px; 
-    text-align: left;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 2;
-    letter-spacing: 0.5px;
-}
-
-.product-form label, .product-form input,.product-form h4{
-margin-bottom: 8px;
-font-size: 1.5rem;
-}
-
-.product-form button{
-    font-size: 1rem;
-    border-radius: 5px;
-    margin-top: 70px;
-    margin-left: 125px;   
-    cursor: pointer;
-    width: fit-content;
-}
-.product-form h4{
-    margin-top: 0;
-}
-/*===============================================*/
-.add-product{
-    text-align: start; 
-    background-color: rgb(255, 255, 255);
-    width: 450px;
-    height: auto;
-    display: none;
-    position: absolute;
-    top: 5%;
-    right: 5%;
-    border-radius: 10px;
-    box-shadow: 2px 2px 5px rgb(0, 0, 0);
-    line-height: 2;
-    letter-spacing: 0.5px;
-}
-.edit-product{
-    text-align: start; 
-    background-color: rgb(255, 255, 255);
-    width: 450px;
-    height: 500px;
-    display: none;
-    position: absolute;
-    top: 5%;
-    right: 5%;
-    border-radius: 10px;
-    box-shadow: 2px 2px 5px rgb(0, 0, 0);
-    line-height: 2;
-    letter-spacing: 0.5px;
-}
-.edit-product h4{
-    font-size: 2rem;
-    margin: 0%;
-}
-#editForm{
-    padding: 20px;
-    font-size: 1.5rem; 
-}
-#editForm input{
-    font-size: 1.5rem;
-    
-}
-#editForm button{
-    font-size: 1.5rem;
-    border-radius: 5px;
-    margin-top: 70px;
-    margin-left: 170px;   
-    cursor: pointer;
-}
-#editForm button:hover{
-    scale: 1.1;
-}
-#editPrice{
-    width: 70px;
-}
-/*=================PRODUCT CONTROLS(EDIT/DELETE)===================*/
-.edit-btn{
-    padding: 5px;
-    border-radius: 5px;
-    width: 70px;
-    cursor: pointer;
-}
-.edit-btn:hover{
-    background-color: green;
-}
-.delete-btn{
-    padding: 5px;
-    border-radius: 5px;
-    width: 70px;
-    cursor: pointer;
-}
-.delete-btn:hover{
-    background-color: red;
-}
-/*==================================================================*/
 .active{
     display: block;
 }
 .show{
     display: block;
 }
+.product-info.blur{
+    filter: blur(5px);
+}
+/* style.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-.closeBtn{
-    position: absolute;
-    top: 10px;
-    right: 40px;
-    cursor: pointer;
-    width: fit-content;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #1f2937;
+}
+
+.product-info {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.product-header {
+    padding: 30px 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.product-header h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#addBtn {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+#addBtn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+}
+
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.product-table thead {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.product-table th {
+    padding: 20px 40px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.product-table td {
+    padding: 20px 40px;
+    border-bottom: 1px solid #f1f5f9;
+    transition: all 0.2s ease;
+}
+
+.product-table tr:hover {
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    transform: scale(1.01);
+}
+
+.product-table tr:nth-child(even) {
+    background: rgba(248, 250, 252, 0.5);
+}
+
+/* Buttons */
+.edit-btn, .delete-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.edit-btn {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+}
+
+.edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.delete-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+}
+
+.delete-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+/* Modal Forms */
+.add-product, .edit-product {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.8);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+}
+
+.add-product.active, .edit-product.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+.product-form, #editForm {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(30px);
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 35px 80px rgba(0, 0, 0, 0.25);
+    position: relative;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.add-product.active .product-form,
+.edit-product.active #editForm {
+    transform: translateY(0);
+}
+
+.product-form h4, #editForm h4 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    cursor: pointer;
+    font-size: 2rem;
+    color: #94a3b8;
+    transition: all 0.2s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.closeBtn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    transform: rotate(90deg);
+}
+
+.product-form label, #editForm label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.95rem;
+}
+
+.product-form input, #editForm input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    margin-bottom: 24px;
+}
+
+.product-form input:focus, #editForm input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+}
+
+.product-form button[type="submit"], #editForm button[type="submit"] {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.product-form button[type="submit"]:hover, #editForm button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+}
+
+/* Blur effect for background */
+.product-info.blur {
+    filter: blur(5px);
+    transform: scale(0.98);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    .product-header {
+        padding: 25px;
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .product-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .product-table th,
+    .product-table td {
+        padding: 15px 20px;
+    }
+    
+    .product-form, #editForm {
+        padding: 30px 25px;
+        margin: 20px;
+    }
+    
+    .edit-btn, .delete-btn {
+        padding: 10px 16px;
+        font-size: 0.8rem;
+        margin-right: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-table {
+        font-size: 0.9rem;
+    }
+    
+    .product-table th,
+    .product-table td {
+        padding: 12px 15px;
+    }
+    
+    .product-header h2 {
+        font-size: 1.3rem;
+    }
+    
+    #addBtn {
+        padding: 14px 24px;
+        font-size: 1rem;
+    }
+}
+
+/* Loading animation for table rows */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.product-table tr {
+    animation: fadeInUp 0.4s ease forwards;
+}
+
+.product-table tr:nth-child(1) { animation-delay: 0.1s; }
+.product-table tr:nth-child(2) { animation-delay: 0.2s; }
+.product-table tr:nth-child(3) { animation-delay: 0.3s; }
+.product-table tr:nth-child(4) { animation-delay: 0.4s; }
+.product-table tr:nth-child(5) { animation-delay: 0.5s; }
