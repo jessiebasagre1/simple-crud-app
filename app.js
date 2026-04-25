@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://basagre2:<bluesky>@cluster0.slbwecg.mongodb.net/?appName=Cluster0')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/myDatabase')
     .then(() => console.log('MONGODB CONNECTED!'))
     .catch(error => console.error('MongoDB connection error:', error));
 
