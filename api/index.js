@@ -1,123 +1,63 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
 const path = require('path');
-const Product = require('./models/Product');
 
 const app = express();
 
 // Middleware
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Serve static files FIRST
-app.use(express.static(path.join(__dirname, '../public')));
+// ✅ FAKE DATA (No MongoDB needed)
+let products = [
+  { _id: '1', name: 'iPhone 15', qty: 10, price: 59999 },
+  { _id: '2', name: 'MacBook Pro', qty: 5, price: 129999 },
+  { _id: '3', name: 'AirPods', qty: 25, price: 12999 }
+];
 
-// MongoDB Connection Pool (Vercel Optimized)
-let cached = global.mongoose;
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
-
-async function connectDB() {
-  if (cached.conn) {
-    return cached.conn;
-  }
-  if (!cached.promise) {
-    const uri = process.env.MONGODB_URI ||'mongodb+srv://basagre2:password123@cluster0.slbwecg.mongodb.net/?appName=Cluster0';
-    if (!uri) {
-      console.error('❌ MONGODB_URI missing!');
-      throw new Error('MONGODB_URI environment variable is required');
-    }
-    cached.promise = mongoose.connect(uri, {
-      bufferCommands: false,
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }).then(m => {
-      console.log('✅ MongoDB Connected');
-      return m;
-    });
-  }
-  cached.conn = await cached.promise;
-  return cached.conn;
-}
+// Serve static files
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Routes
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
-// 🟢 GET ALL PRODUCTS
-app.get('/api/products', async (req, res) => {
-  try {
-    await connectDB();
-    const products = await Product.find().sort({ createdAt: -1 });
-    res.json({ success: true, data: products });
-  } catch (error) {
-    console.error('GET Error:', error);
-    res.status(500).json({ error: 'Server error' });
-  }
+// 🟢 API ROUTES (Fake DB)
+app.get('/api/products', (req, res) => {
+  res.json({ success: true, data: products });
 });
 
-// 🟢 CREATE PRODUCT
-app.post('/api/products', async (req, res) => {
-  try {
-    await connectDB();
-    const product = new Product(req.body);
-    await product.save();
-    res.status(201).json(product);
-  } catch (error) {
-    console.error('POST Error:', error);
-    res.status(400).json({ error: error.message });
-  }
+app.post('/api/products', (req, res) => {
+  const newProduct = {
+    _id: Date.now().toString(),
+    ...req.body,
+    qty: parseInt(req.body.qty),
+    price: parseFloat(req.body.price)
+  };
+  products.unshift(newProduct);
+  res.status(201).json(newProduct);
 });
 
-// 🟢 GET SINGLE PRODUCT
-app.get('/api/products/:id', async (req, res) => {
-  try {
-    await connectDB();
-    const product = await Product.findById(req.params.id);
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-    res.json(product);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
+app.get('/api/products/:id', (req, res) => {
+  const product = products.find(p => p._id === req.params.id);
+  if (!product) return res.status(404).json({ error: 'Not found' });
+  res.json(product);
 });
 
-// 🟡 UPDATE PRODUCT
-app.put('/api/products/:id', async (req, res) => {
-  try {
-    await connectDB();
-    const product = await Product.findByIdAndUpdate(
-      req.params.id, 
-      req.body, 
-      { new: true, runValidators: true }
-    );
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-    res.json(product);
-  } catch (error) {
-    console.error('PUT Error:', error);
-    res.status(400).json({ error: error.message });
-  }
+app.put('/api/products/:id', (req, res) => {
+  const index = products.findIndex(p => p._id === req.params.id);
+  if (index === -1) return res.status(404).json({ error: 'Not found' });
+  
+  products[index] = { ...products[index], ...req.body, qty: parseInt(req.body.qty), price: parseFloat(req.body.price) };
+  res.json(products[index]);
 });
 
-// 🔴 DELETE PRODUCT
-app.delete('/api/products/:id', async (req, res) => {
-  try {
-    await connectDB();
-    const product = await Product.findByIdAndDelete(req.params.id);
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-    res.json({ message: 'Product deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
+app.delete('/api/products/:id', (req, res) => {
+  const index = products.findIndex(p => p._id === req.params.id);
+  if (index === -1) return res.status(404).json({ error: 'Not found' });
+  
+  products.splice(index, 1);
+  res.json({ message: 'Deleted' });
 });
 
 module.exports = app;
