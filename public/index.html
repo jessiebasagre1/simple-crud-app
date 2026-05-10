@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📦 Product CRUD - Vercel</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📦 Product Manager</h1>
+            <button id="addBtn" class="btn btn-primary">➕ Add Product</button>
+        </header>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Stock</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTable">
+                    <tr>
+                        <td colspan="4" class="loading">Loading products...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Add Modal -->
+        <div id="addModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>➕ Add New Product</h2>
+                <form id="addForm">
+                    <input type="text" id="name" placeholder="Product Name" required>
+                    <input type="number" id="qty" placeholder="Quantity" min="0" required>
+                    <input type="number" id="price" placeholder="Price" step="0.01" min="0" required>
+                    <button type="submit" class="btn btn-primary">Add Product</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>✏️ Edit Product</h2>
+                <form id="editForm">
+                    <input type="text" id="editName" required>
+                    <input type="number" id="editQty" min="0" required>
+                    <input type="number" id="editPrice" step="0.01" min="0" required>
+                    <input type="hidden" id="editId">
+                    <button type="submit" class="btn btn-primary">Update Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>
