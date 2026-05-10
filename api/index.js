@@ -1,122 +1,155 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const path = require('path');
-const Product = require('./models/Product');
+
+// Global connection cache
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { 
+    conn: null, 
+    promise: null 
+  };
+}
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Serve static files FIRST
-app.use(express.static(path.join(__dirname, '../public')));
-
-// MongoDB Connection Pool (Vercel Optimized)
-let cached = global.mongoose;
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
-
-async function connectDB() {
+// ✅ PRODUCTION Mongoose Connection
+async function dbConnect() {
+  // If already connected, return
   if (cached.conn) {
     return cached.conn;
   }
-  if (!cached.promise) {
-    const uri = process.env.MONGODB_URI
+
+  // If pending connection, wait
+  if (cached.promise) {
+    return await cached.promise;
+  }
+
+  // New connection
+  try {
+    const uri = process.env.MONGODB_URI;
+    
     if (!uri) {
-      console.error('❌ MONGODB_URI missing!');
       throw new Error('MONGODB_URI environment variable is required');
     }
+
     cached.promise = mongoose.connect(uri, {
-      bufferCommands: false,
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }).then(m => {
-      console.log('✅ MongoDB Connected');
-      return m;
+      bufferCommands: false,        // Disable mongoose buffering
+      maxPoolSize: 10,             // Vercel connection limit
+      serverSelectionTimeoutMS: 5000, // Fast fail
+      socketTimeoutMS: 45000,      // Close sockets after 45s (Vercel timeout)
+      family: 4                    // Use IPv4, skip IPv6
     });
+
+    cached.conn = await cached.promise;
+    console.log('✅ MongoDB Connected');
+    return cached.conn;
+  } catch (error) {
+    console.error('❌ MongoDB Connection Error:', error.message);
+    throw error;
   }
-  cached.conn = await cached.promise;
-  return cached.conn;
 }
+
+// Product Model
+const productSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true },
+  qty: { type: Number, required: true, min: 0 },
+  price: { type: Number, required: true, min: 0 }
+}, { timestamps: true });
+
+const Product = mongoose.model('Product', productSchema);
+
+// Middleware - Connect on EVERY request
+app.use('*', async (req, res, next) => {
+  try {
+    await dbConnect();
+    next();
+  } catch (error) {
+    res.status(500).json({ error: 'Database connection failed' });
+  }
+});
 
 // Routes
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.json({ 
+    message: 'Product API Working! 🚀',
+    endpoints: ['GET /api/products', 'POST /api/products']
+  });
 });
 
-// 🟢 GET ALL PRODUCTS
 app.get('/api/products', async (req, res) => {
   try {
-    await connectDB();
     const products = await Product.find().sort({ createdAt: -1 });
-    res.json({ success: true, data: products });
+    res.json({ success: true, count: products.length, data: products });
   } catch (error) {
-    console.error('GET Error:', error);
-    res.status(500).json({ error: 'Server error' });
+    console.error('GET /api/products:', error);
+    res.status(500).json({ error: 'Failed to fetch products' });
   }
 });
 
-// 🟢 CREATE PRODUCT
 app.post('/api/products', async (req, res) => {
   try {
-    await connectDB();
-    const product = new Product(req.body);
+    const product = new Product({
+      name: req.body.name,
+      qty: parseInt(req.body.qty),
+      price: parseFloat(req.body.price)
+    });
     await product.save();
-    res.status(201).json(product);
+    res.status(201).json({ success: true, data: product });
   } catch (error) {
-    console.error('POST Error:', error);
+    console.error('POST /api/products:', error);
     res.status(400).json({ error: error.message });
   }
 });
 
-// 🟢 GET SINGLE PRODUCT
 app.get('/api/products/:id', async (req, res) => {
   try {
-    await connectDB();
     const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });
     }
-    res.json(product);
+    res.json({ success: true, data: product });
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Product not found' });
   }
 });
 
-// 🟡 UPDATE PRODUCT
 app.put('/api/products/:id', async (req, res) => {
   try {
-    await connectDB();
     const product = await Product.findByIdAndUpdate(
-      req.params.id, 
-      req.body, 
+      req.params.id,
+      {
+        name: req.body.name,
+        qty: parseInt(req.body.qty),
+        price: parseFloat(req.body.price)
+      },
       { new: true, runValidators: true }
     );
+    
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });
     }
-    res.json(product);
+    
+    res.json({ success: true, data: product });
   } catch (error) {
-    console.error('PUT Error:', error);
     res.status(400).json({ error: error.message });
   }
 });
 
-// 🔴 DELETE PRODUCT
 app.delete('/api/products/:id', async (req, res) => {
   try {
-    await connectDB();
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });
     }
-    res.json({ message: 'Product deleted successfully' });
+    res.json({ success: true, message: 'Product deleted' });
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Delete failed' });
   }
 });
 
